@@ -39,6 +39,8 @@ fun main() {
 }
 
 fun printVert(g: Graphics, bounds: Rectangle, x: Float, y: Float, z: Int) {
+    if (z <= 0) return
+
     val size = 12
     val wx = bounds.width
     val wy = bounds.height
