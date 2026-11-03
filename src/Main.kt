@@ -42,10 +42,12 @@ fun printVert(g: Graphics, bounds: Rectangle, x: Float, y: Float, z: Int) {
     val size = 12
     val wx = bounds.width
     val wy = bounds.height
-    val ratio = wx.toFloat() / wy.toFloat()
+    val maxDim = wx.coerceAtLeast(wy).toFloat()
 
-    val x: Float = (x/z+1) * wx/2 - size/2
-    val y: Float = (y/z+1) * wy/2 - size/2
+    var x = x / z
+    var y = y / z
+    x = (x + 1) * maxDim / 2 + (wx - maxDim) / 2 - size / 2
+    y = (y + 1) * maxDim / 2 + (wy - maxDim) / 2 - size / 2
 
     g.fillRect(x.toInt(), y.toInt(), size, size)
 }
