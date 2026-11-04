@@ -6,17 +6,18 @@ import javax.swing.JPanel
 import javax.swing.SwingUtilities
 import javax.swing.Timer
 
-private var shapeVertices = listOf(-0.5, 0.5).flatMap { z ->
+private var shapeVertices = listOf(-1, 1).flatMap { z ->
     listOf(
-        VirtualVertex(0.5, 0.5, z),
-        VirtualVertex(-0.5, 0.5, z),
-        VirtualVertex(0.5, -0.5, z),
-        VirtualVertex(-0.5, -0.5, z),
+        VirtualVertex(1, 1, z),
+        VirtualVertex(-1, 1, z),
+        VirtualVertex(1, -1, z),
+        VirtualVertex(-1, -1, z),
     )
 }
 
 private fun mainAction(vert: VirtualVertex): VirtualVertex {
-    return vert.rotateY(0.015)
+    return vert.rotateY(0.001)
+        .rotateX(0.005)
 }
 
 fun main() {
