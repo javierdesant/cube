@@ -1,11 +1,15 @@
 import java.awt.*
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import javax.swing.JFrame
+import javax.swing.JPanel
+import javax.swing.SwingUtilities
+import javax.swing.Timer
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.system.exitProcess
 
-private val cube: List<VVert> = (1..2).flatMap { z ->
+private var cube = listOf(-0.5, 0.5).flatMap { z ->
     listOf(
         VVert( 0.5,  0.5, z),
         VVert(-0.5,  0.5, z),
@@ -15,31 +19,44 @@ private val cube: List<VVert> = (1..2).flatMap { z ->
 }
 
 fun main() {
-    val f = Frame("cube")
-    val canvas = object : Canvas() {
-        override fun paint(g: Graphics) {
-            g.color = Color.GREEN
-            cube.forEach { i ->
-                cube.forEach {
-                    it.to2D(bounds).printConn(g, i.to2D(bounds))
+    SwingUtilities.invokeLater {
+        val f = JFrame("cube")
+        val panel = object : JPanel() {
+            override fun paintComponent(g: Graphics) {
+                super.paintComponent(g)
+                val g2d = g as Graphics2D
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+                g2d.color = Color.GREEN
+                cube.forEach { i ->
+                    cube.forEach { j ->
+                        j.to2D(bounds).printConn(g2d, i.to2D(bounds))
+                    }
                 }
             }
         }
-    }
-    canvas.background = Color.BLACK
-    f.add(canvas)
+        panel.background = Color.BLACK
+        f.contentPane.add(panel)
 
-    f.setSize(800, 600)
-    f.setLocationRelativeTo(null)
+        f.setSize(800, 600)
+        f.setLocationRelativeTo(null)
+        f.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 
-    f.addWindowListener(object : WindowAdapter() {
-        override fun windowClosing(e: WindowEvent) {
-            f.dispose()
-            exitProcess(0)
+        val timer = Timer(16) {
+            cube = cube.map {
+                it.rotateY(0.015)
+            }
+            panel.repaint()
         }
-    })
 
-    f.isVisible = true
+        f.addWindowListener(object : WindowAdapter() {
+            override fun windowClosing(e: WindowEvent) {
+                timer.stop()
+            }
+        })
+
+        f.isVisible = true
+        timer.start()
+    }
 }
 
 private abstract class Vert(
