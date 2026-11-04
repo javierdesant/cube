@@ -1,24 +1,24 @@
-import org.w3c.dom.ranges.Range
 import java.awt.*
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import kotlin.system.exitProcess
+
+private val cube: List<Vert> = (1..2).flatMap { z ->
+    listOf(
+        Vert(-0.5,  0.5, z),
+        Vert( 0.5,  0.5, z),
+        Vert(-0.5, -0.5, z),
+        Vert( 0.5, -0.5, z)
+    )
+}
 
 fun main() {
     val f = Frame("cube")
     val canvas = object : Canvas() {
         override fun paint(g: Graphics) {
             g.color = Color.GREEN
-            repeat(40) {
-                printVert(g, bounds, 0f, 0f, it)
-                printVert(g, bounds, 1f, 0f, it)
-                printVert(g, bounds, 0f, 1f, it)
-                printVert(g, bounds, -1f, 0f, it)
-                printVert(g, bounds, 0f, -1f, it)
-                printVert(g, bounds, -1f, -1f, it)
-                printVert(g, bounds, 1f, -1f, it)
-                printVert(g, bounds, -1f, 1f, it)
-                printVert(g, bounds, 1f, 1f, it)
+            cube.forEach {
+                printVert(g, bounds, it)
             }
         }
     }
@@ -38,7 +38,18 @@ fun main() {
     f.isVisible = true
 }
 
-fun printVert(g: Graphics, bounds: Rectangle, x: Float, y: Float, z: Int) {
+private data class Vert(
+    val x: Float,
+    val y: Float,
+    val z: Int
+) {
+    constructor(x: Number, y: Number, z: Number) : this(x.toFloat(), y.toFloat(), z.toInt())
+}
+
+private fun printVert(g: Graphics, bounds: Rectangle, vert: Vert) {
+    printVert(g, bounds, vert.x, vert.y, vert.z)
+}
+private fun printVert(g: Graphics, bounds: Rectangle, x: Float, y: Float, z: Int) {
     if (z <= 0) return
 
     val size = 12
