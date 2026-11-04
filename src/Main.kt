@@ -17,6 +17,10 @@ private var cube = listOf(-0.5, 0.5).flatMap { z ->
     )
 }
 
+private fun mainAction(vert: VVert): VVert {
+    return vert.rotateY(0.015)
+}
+
 fun main() {
     SwingUtilities.invokeLater {
         val f = JFrame("cube")
@@ -42,7 +46,7 @@ fun main() {
 
         val timer = Timer(16) {
             cube = cube.map {
-                it.rotateY(0.015)
+                mainAction(vert = it)
             }
             panel.repaint()
         }
