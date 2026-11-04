@@ -8,7 +8,7 @@ import javax.swing.Timer
 import kotlin.math.cos
 import kotlin.math.sin
 
-private var cube = listOf(-0.5, 0.5).flatMap { z ->
+private var shapeVertices = listOf(-0.5, 0.5).flatMap { z ->
     listOf(
         VVert(0.5, 0.5, z),
         VVert(-0.5, 0.5, z),
@@ -30,8 +30,8 @@ fun main() {
                 val g2d = g as Graphics2D
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
                 g2d.color = Color.GREEN
-                cube.forEach { i ->
-                    cube.forEach { j ->
+                shapeVertices.forEach { i ->
+                    shapeVertices.forEach { j ->
                         j.to2D(bounds).printConn(g2d, i.to2D(bounds))
                     }
                 }
@@ -45,7 +45,7 @@ fun main() {
         f.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 
         val timer = Timer(16) {
-            cube = cube.map {
+            shapeVertices = shapeVertices.map {
                 mainAction(vert = it)
             }
             panel.repaint()
