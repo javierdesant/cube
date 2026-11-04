@@ -7,13 +7,12 @@ import javax.swing.SwingUtilities
 import javax.swing.Timer
 import kotlin.math.cos
 import kotlin.math.sin
-import kotlin.system.exitProcess
 
 private var cube = listOf(-0.5, 0.5).flatMap { z ->
     listOf(
-        VVert( 0.5,  0.5, z),
-        VVert(-0.5,  0.5, z),
-        VVert( 0.5, -0.5, z),
+        VVert(0.5, 0.5, z),
+        VVert(-0.5, 0.5, z),
+        VVert(0.5, -0.5, z),
         VVert(-0.5, -0.5, z),
     )
 }
