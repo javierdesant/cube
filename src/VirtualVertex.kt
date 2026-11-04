@@ -2,43 +2,45 @@ import java.awt.Rectangle
 import kotlin.math.cos
 import kotlin.math.sin
 
-data class VVert(
+data class VirtualVertex(
     override val x: Float,
     override val y: Float,
     override val z: Float
-) : Vert(x, y, z) {
+) : Vertex(x, y, z) {
     constructor(x: Number, y: Number, z: Number) : this(x.toFloat(), y.toFloat(), z.toFloat())
 
-    fun to2D(bounds: Rectangle): PVert {
+    val offsetZ = 2.5f
+
+    fun to2D(bounds: Rectangle): ProjectedVertex {
         // Offset z to prevent division by zero or negative depth during 3D rotation
-        val perspectiveZ = z + 2.5f
-        return PVert(bounds, x, y, perspectiveZ)
+        val perspectiveZ = z + offsetZ
+        return ProjectedVertex(bounds, x, y, perspectiveZ)
     }
 
-    fun rotateX(a: Double): VVert {
+    fun rotateX(a: Double): VirtualVertex {
         val cosA = cos(a).toFloat()
         val sinA = sin(a).toFloat()
-        return VVert(
+        return VirtualVertex(
             x = x,
             y = y * cosA - z * sinA,
             z = y * sinA + z * cosA
         )
     }
 
-    fun rotateY(a: Double): VVert {
+    fun rotateY(a: Double): VirtualVertex {
         val cosA = cos(a).toFloat()
         val sinA = sin(a).toFloat()
-        return VVert(
+        return VirtualVertex(
             x = x * cosA + z * sinA,
             y = y,
             z = -x * sinA + z * cosA
         )
     }
 
-    fun rotateZ(a: Double): VVert {
+    fun rotateZ(a: Double): VirtualVertex {
         val cosA = cos(a).toFloat()
         val sinA = sin(a).toFloat()
-        return VVert(
+        return VirtualVertex(
             x = x * cosA - y * sinA,
             y = x * sinA + y * cosA,
             z = z

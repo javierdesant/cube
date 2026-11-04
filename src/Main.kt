@@ -8,14 +8,14 @@ import javax.swing.Timer
 
 private var shapeVertices = listOf(-0.5, 0.5).flatMap { z ->
     listOf(
-        VVert(0.5, 0.5, z),
-        VVert(-0.5, 0.5, z),
-        VVert(0.5, -0.5, z),
-        VVert(-0.5, -0.5, z),
+        VirtualVertex(0.5, 0.5, z),
+        VirtualVertex(-0.5, 0.5, z),
+        VirtualVertex(0.5, -0.5, z),
+        VirtualVertex(-0.5, -0.5, z),
     )
 }
 
-private fun mainAction(vert: VVert): VVert {
+private fun mainAction(vert: VirtualVertex): VirtualVertex {
     return vert.rotateY(0.015)
 }
 

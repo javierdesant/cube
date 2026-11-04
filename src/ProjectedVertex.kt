@@ -1,12 +1,12 @@
 import java.awt.Graphics
 import java.awt.Rectangle
 
-data class PVert(
+data class ProjectedVertex(
     private val bounds: Rectangle,
     private val originalX: Float,
     private val originalY: Float,
     private val depth: Float = 1f
-) : Vert(originalX, originalY, depth) {
+) : Vertex(originalX, originalY, depth) {
 
     init {
         if (depth <= 0f) {
@@ -27,12 +27,12 @@ data class PVert(
         (originalY / depth + 1) * minDim / 2 +
                 (wy - minDim) / 2 - size / 2
 
-    fun printVert(g: Graphics): PVert {
+    fun printVert(g: Graphics): ProjectedVertex {
         g.fillRect(x.toInt(), y.toInt(), size, size)
         return this
     }
 
-    fun printConn(g: Graphics, vert: PVert): PVert {
+    fun printConn(g: Graphics, vert: ProjectedVertex): ProjectedVertex {
         g.drawLine(x.toInt(), y.toInt(), vert.x.toInt(), vert.y.toInt())
         return this
     }
