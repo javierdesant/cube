@@ -20,6 +20,8 @@ private fun mainAction(vert: VirtualVertex): VirtualVertex {
         .rotateX(0.005)
 }
 
+private const val DELAY: Int = 1
+
 fun main() {
     SwingUtilities.invokeLater {
         val f = JFrame("cube")
@@ -43,7 +45,7 @@ fun main() {
         f.setLocationRelativeTo(null)
         f.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 
-        val timer = Timer(16) {
+        val timer = Timer(DELAY) {
             shapeVertices = shapeVertices.map {
                 mainAction(vert = it)
             }
