@@ -1,6 +1,8 @@
 import java.awt.*
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.system.exitProcess
 
 private val cube: List<VVert> = (1..2).flatMap { z ->
@@ -50,11 +52,11 @@ private data class PVert(
     private val bounds: Rectangle,
     private val originalX: Float,
     private val originalY: Float,
-    private val depth: Int = 1
-) : Vert(originalX, originalY, 1) {
+    private val depth: Float = 1f
+) : Vert(originalX, originalY, depth) {
 
     init {
-        if (depth <= 0) {
+        if (depth <= 0f) {
             throw IllegalArgumentException("Depth must be greater than 0!")
         }
     }
@@ -77,7 +79,7 @@ private data class PVert(
         return this
     }
 
-    fun printConn(g: Graphics, vert: PVert): PVert{
+    fun printConn(g: Graphics, vert: PVert): PVert {
         g.drawLine(x.toInt(), y.toInt(), vert.x.toInt(), vert.y.toInt())
         return this
     }
@@ -86,11 +88,43 @@ private data class PVert(
 private data class VVert(
     override val x: Float,
     override val y: Float,
-    override val z: Int
+    override val z: Float
 ) : Vert(x, y, z) {
-    constructor(x: Number, y: Number, z: Int) : this(x.toFloat(), y.toFloat(), z)
+    constructor(x: Number, y: Number, z: Number) : this(x.toFloat(), y.toFloat(), z.toFloat())
 
     fun to2D(bounds: Rectangle): PVert {
-        return PVert(bounds, x, y, z)
+        // Offset z to prevent division by zero or negative depth during 3D rotation
+        val perspectiveZ = z + 2.5f
+        return PVert(bounds, x, y, perspectiveZ)
+    }
+
+    fun rotateX(a: Double): VVert {
+        val cosA = cos(a).toFloat()
+        val sinA = sin(a).toFloat()
+        return VVert(
+            x = x,
+            y = y * cosA - z * sinA,
+            z = y * sinA + z * cosA
+        )
+    }
+
+    fun rotateY(a: Double): VVert {
+        val cosA = cos(a).toFloat()
+        val sinA = sin(a).toFloat()
+        return VVert(
+            x = x * cosA + z * sinA,
+            y = y,
+            z = -x * sinA + z * cosA
+        )
+    }
+
+    fun rotateZ(a: Double): VVert {
+        val cosA = cos(a).toFloat()
+        val sinA = sin(a).toFloat()
+        return VVert(
+            x = x * cosA - y * sinA,
+            y = x * sinA + y * cosA,
+            z = z
+        )
     }
 }
